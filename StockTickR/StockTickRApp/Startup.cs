@@ -8,10 +8,8 @@ namespace SignalR.StockTicker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
-
-            services.AddScoped<StockTickerHub>();
             services.AddSingleton<StockTicker>();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -21,7 +19,7 @@ namespace SignalR.StockTicker
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<StockTickerHub>("stocks");
+                routes.MapHub<StockTickerHub>("/stocks");
             });
         }
     }

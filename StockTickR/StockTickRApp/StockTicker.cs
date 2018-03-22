@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Channels;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SignalR.StockTicker
@@ -190,10 +189,10 @@ namespace SignalR.StockTicker
             switch (marketState)
             {
                 case MarketState.Open:
-                    await Hub.Clients.All.InvokeAsync("marketOpened");
+                    await Hub.Clients.All.SendAsync("marketOpened");
                     break;
                 case MarketState.Closed:
-                    await Hub.Clients.All.InvokeAsync("marketClosed");
+                    await Hub.Clients.All.SendAsync("marketClosed");
                     break;
                 default:
                     break;
@@ -202,12 +201,12 @@ namespace SignalR.StockTicker
 
         private async Task BroadcastMarketReset()
         {
-            await Hub.Clients.All.InvokeAsync("marketReset");
+            await Hub.Clients.All.SendAsync("marketReset");
         }
 
         private async Task BroadcastStockPrice(Stock stock)
         {
-            await Hub.Clients.All.InvokeAsync("updateStockPrice", stock);
+            await Hub.Clients.All.SendAsync("updateStockPrice", stock);
         }
     }
 

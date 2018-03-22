@@ -19,7 +19,6 @@ namespace CsharpClient
             var connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/stocks")
                 .WithConsoleLogger()
-                .WithMessagePackProtocol()
                 .WithTransport(TransportType.WebSockets)
                 .Build();
 
@@ -38,7 +37,6 @@ namespace CsharpClient
                 Console.WriteLine("Connection closed with error: {0}", e);
 
                 cts.Cancel();
-                return Task.CompletedTask;
             };
 
             connection.On("marketOpened", async () =>
@@ -51,6 +49,10 @@ namespace CsharpClient
             if (string.Equals(state, "Open"))
             {
                 await StartStreaming();
+            }
+            else
+            {
+                await connection.SendAsync("OpenMarket");
             }
 
             // Keep client running until cancel requested.
